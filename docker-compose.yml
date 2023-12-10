@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+
+  userdb:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=usuario
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=usersdatabase
