@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-
+  
   userdb:
     image: postgres
     restart: always
@@ -11,3 +11,14 @@ services:
       - POSTGRES_USER=usuario
       - POSTGRES_PASSWORD=1234
       - POSTGRES_DB=usersdatabase
+
+  userapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3001'
+    depends_on:
+      - userdb
+    volumes:
+      - ./src:/app/src
