@@ -35,9 +35,17 @@ export class UserService {
 
     async read(id: string): Promise<User>{
 
-        console.log('data')
-        console.log(id)
         const user = await this.prisma.user.findUnique({where:{id}});
+
+        if(!user)
+            throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
+
+        return user;
+    }
+
+    async readByUsername(username: string): Promise<User>{
+
+        const user = await this.prisma.user.findUnique({where:{username}});
 
         if(!user)
             throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
