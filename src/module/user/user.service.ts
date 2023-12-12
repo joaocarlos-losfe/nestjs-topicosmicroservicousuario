@@ -53,23 +53,32 @@ export class UserService {
         return user;
     }
 
-    async update(id: string, data: UserUpdate): Promise<User>{
-        const user = await this.prisma.user.findUnique({where:{id}});
+    async update(id: string, data: UserUpdate): Promise<User | null>{
 
-        if(!user)
-            throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
+        try{
+            const user = await this.prisma.user.findUnique({where:{id}});
+          
+            if(!user)
+                throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
 
-        if(data.password){
-            data.password = await Bcrypt.hash(data.password)
+            if(data.password)
+                data.password = await Bcrypt.hash(data.password);
+            
+            const updatedUser = await this.prisma.user.update({
+                data:{
+                    ...data,
+                    updated_at: new Date()
+                },
+                where:{ id }
+            });
+            
+            return updatedUser;
+            
         }
-
-        return this.prisma.user.update({
-            data:{
-                ...data,
-                updated_at: new Date()
-            },
-            where:{ id }
-        });
+        catch(e){
+            throw new HttpException('Usuário não encontrado', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
     }
 
     async delete(id: string): Promise<User>{
