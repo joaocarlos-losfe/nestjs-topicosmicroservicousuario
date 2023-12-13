@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
 import { UserCreate } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
-
 import { Bcrypt } from '../../utils/security';
 import { UserUpdate } from './dto/update-user.dto';
 
+import axios from 'axios';
 
 @Injectable()
 export class UserService {
@@ -71,7 +71,13 @@ export class UserService {
                 },
                 where:{ id }
             });
-            
+
+        
+            if(user.username != updatedUser.username){
+                await axios.put(`http://messageapi:5000/messages/${user.username}/${updatedUser.username}`);
+                await axios.put(`http://messageapi:5000/responses/${user.username}/${updatedUser.username}`);
+            }
+                
             return updatedUser;
             
         }
@@ -86,6 +92,8 @@ export class UserService {
 
         if(!user)
             throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
+
+        await axios.delete(`http://messageapi:5000/messages/delete-all-messages-by-user/${user.username}`);
 
         return this.prisma.user.delete({where:{id}});
     }
