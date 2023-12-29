@@ -45,6 +45,14 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+##Atenção
+###Alterar o arquivo .env para localhost e em seguida executar:
+```bash
+#para executar migração do banco
+$ npx prisma migrate dev
+#depois retorne para o host anterior (ctrl + z)
+```
+
 ## Test
 
 ```bash
