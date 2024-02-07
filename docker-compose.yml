@@ -1,8 +1,8 @@
 version: '3.1'
 
-networks:
-  my-network:
-    external: true
+#networks:
+  #my-network:
+    #external: true
 
 services:
   
@@ -15,8 +15,8 @@ services:
       - POSTGRES_USER=usuario
       - POSTGRES_PASSWORD=1234
       - POSTGRES_DB=usersdatabase
-    networks:
-      - my-network
+    #networks:
+      #- my-network
 
   userapi:
     build:
@@ -29,5 +29,5 @@ services:
       - userdb
     volumes:
       - ./src:/app/src
-    networks:
-      - my-network
+    #networks:
+      #- my-network

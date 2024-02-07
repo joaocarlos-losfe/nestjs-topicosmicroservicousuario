@@ -5,4 +5,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 RUN npx prisma generate
-CMD [ "npm", "run", "start:prod" ]
+COPY .env ./
+EXPOSE 3001
+EXPOSE 80
+CMD [ "npm", "run", "start:prod", "0.0.0.0:3001"]
